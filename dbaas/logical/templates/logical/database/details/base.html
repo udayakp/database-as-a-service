@@ -63,6 +63,8 @@
           <li role="presentation" {% if current_tab == 'parameters' %} class="active" {% endif %}><a href="{% url 'admin:logical_database_parameters' database.id %}">Parameters</a></li>
         {% endif %}
         <li role="presentation" {% if current_tab == 'destroy' %} class="active" {% endif %}><a href="{% url 'admin:logical_database_destroy' database.id %}">Destroy</a></li>
+        <li role="presentation" {% if current_tab == 'alarm' %} class="active" {% endif %}><a href="{% url 'admin:logical_database_alarm' database.id %}">Alarm</a></li>
+
       </ul>
     {% endblock %}
   </div>
