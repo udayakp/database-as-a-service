@@ -115,6 +115,9 @@ class DisableAlarms(ZabbixStep):
     def __unicode__(self):
         return "Disabling Zabbix alarms..."
 
+    def get_monitors(self):
+        return self.zabbix_provider.get_monitors()
+
     def do(self):
         self.zabbix_provider.disable_alarms()
 
@@ -127,8 +130,12 @@ class EnableAlarms(ZabbixStep):
     def __unicode__(self):
         return "Enabling Zabbix alarms..."
 
+    def get_monitors(self):
+        return self.zabbix_provider.get_monitors()
+
     def do(self):
         self.zabbix_provider.enable_alarms()
 
     def undo(self):
         self.zabbix_provider.disable_alarms()
+
