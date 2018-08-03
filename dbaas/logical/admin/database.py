@@ -32,7 +32,7 @@ from logical.views import database_details, database_hosts, \
     database_resize_rollback, database_make_backup, \
     database_change_parameters, database_change_parameters_retry, \
     database_switch_write, database_reinstall_vm, database_reinstall_vm_retry,\
-    DatabaseParameters
+    DatabaseParameters, database_alarm
 from logical.forms import DatabaseForm
 from logical.service.database import DatabaseService
 
@@ -583,6 +583,11 @@ class DatabaseAdmin(admin.DjangoServicesAdmin):
                 r'^/?(?P<id>\d+)/destroy/$',
                 self.admin_site.admin_view(database_destroy),
                 name="logical_database_destroy"
+            ),
+            url(
+                r'^/?(?P<id>\d+)/alarm/$',
+                self.admin_site.admin_view(database_alarm),
+                name="logical_database_alarm"
             ),
             url(
                 r'^/?(?P<id>\d+)/parameters/$',
