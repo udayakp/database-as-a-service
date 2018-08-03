@@ -26,6 +26,7 @@ from logical.forms.database import DatabaseDetailsForm
 from logical.models import Credential, Database, Project
 from logical.validators import (check_is_database_enabled, check_is_database_dead,
                                 ParameterValidator)
+from workflow.steps.util.zabbix import DisableAlarms
 
 
 class CredentialView(BaseDetailView):
@@ -1031,6 +1032,26 @@ def database_destroy(request, context, database):
 
     return render_to_response(
         "logical/database/details/destroy_tab.html",
+        context, RequestContext(request)
+    )
+
+def _alarm_databases(request, database):
+    disable_alarms = DisableAlarms(database)
+    get_alarms = disable_alarms.get_monitors()
+    if get_alarms:
+        pass
+
+
+@database_view('alarm')
+def database_alarm(request, context, database):
+    if request.method == 'POST':
+        if 'database_alarm' in request.POST:
+            response = _alarm_databases(request, database)
+            if response:
+                return response
+
+    return render_to_response(
+        "logical/database/details/alarm_tab.html",
         context, RequestContext(request)
     )
 
