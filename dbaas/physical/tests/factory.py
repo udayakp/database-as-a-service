@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 import factory
-from dbaas_nfsaas.models import HostAttr
 from physical import models
 
 
@@ -61,7 +60,19 @@ class OfferingFactory(factory.DjangoModelFactory):
     name = factory.Sequence(lambda n: 'Offering-{0}'.format(n))
     memory_size_mb = 998
     cpus = 1
-    environment = factory.SubFactory(EnvironmentFactory)
+
+    @factory.post_generation
+    def environments(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for env in extracted:
+                self.environments.add(env)
+        else:
+            self.environments.add(EnvironmentFactory())
 
 
 class PlanFactory(factory.DjangoModelFactory):
@@ -136,13 +147,11 @@ class DatabaseInfraParameterFactory(factory.DjangoModelFactory):
     value = ''
 
 
-class NFSaaSHostAttr(factory.DjangoModelFactory):
-    FACTORY_FOR = HostAttr
+class VolumeFactory(factory.DjangoModelFactory):
+    FACTORY_FOR = models.Volume
 
     host = factory.SubFactory(HostFactory)
-    nfsaas_export_id = factory.Sequence(lambda n: n)
-    nfsaas_path = factory.Sequence(lambda n: 'vol/testing-{0}'.format(n))
-    nfsaas_path_host = factory.Sequence(lambda n: 'testing-{0}'.format(n))
+    identifier = factory.Sequence(lambda n: n)
     is_active = True
-    nfsaas_size_kb = 1000
-    nfsaas_used_size_kb = 10
+    total_size_kb = 100
+    used_size_kb = 10
