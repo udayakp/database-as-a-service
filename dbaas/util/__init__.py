@@ -38,8 +38,21 @@ def slugify(string):
     return slugify_function(string, separator="_")
 
 
-def make_db_random_password():
-    return User.objects.make_random_password()
+def make_db_random_password(
+        length=32,
+        password_characters='abcdefghijklmnopqrstuvwxyz',
+        passwors_numbers='0123456789',
+        password_especial_characters='#*,-.=?^_{}'):
+
+    return User.objects.make_random_password(
+        length=length,
+        allowed_chars=('{}{}{}{}'.format(
+            password_characters,
+            password_characters.upper(),
+            passwors_numbers,
+            password_especial_characters
+        ))
+    )
 
 
 def as_json(f):

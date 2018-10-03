@@ -54,6 +54,7 @@
                 "type": "PUT",
             }).done(function(data) {
                 $(".show-password", credential.$row).attr("data-content", data.credential.password);
+                $(".copy-password", credential.$row).attr("data-content", data.credential.password);
                 if (callback) {
                     callback(credential);
                 }
@@ -128,6 +129,16 @@
         var initialize_listeners = function(credential) {
             // put all listeners
             var $row = credential.$row;
+
+            $(".copy-password", $row).on('click', function(e) {
+              var link = $(this).attr('data-content');
+              var tmp_input = document.createElement("input");
+              tmp_input.value = link;
+              document.body.appendChild(tmp_input);
+              tmp_input.select();
+              document.execCommand("copy");
+              document.body.removeChild(tmp_input);
+            });
 
             $(".show-password", $row).popover({"trigger": "manual", "placement": "left"})
             .on('click', function(e) {
