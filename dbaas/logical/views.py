@@ -3,6 +3,7 @@ from __future__ import absolute_import, unicode_literals
 import json
 from urlparse import parse_qs
 from collections import OrderedDict
+import logging
 from django.contrib import messages
 from django.core.exceptions import ValidationError, PermissionDenied
 from django.core.urlresolvers import reverse
@@ -27,9 +28,26 @@ from logical.forms.database import DatabaseDetailsForm
 from logical.models import Credential, Database, Project
 from logical.validators import (check_is_database_enabled, check_is_database_dead,
                                 ParameterValidator)
-import logging
+
 
 LOG = logging.getLogger(__name__)
+
+
+def credential_parameter_by_name(request, env_id, param_name):
+
+    try:
+        env = Environment.objects.get(id=env_id)
+        credential = get_credentials_for(
+            env, CredentialType.HOST_PROVIDER
+        )
+    except (IndexError, Environment.DoesNotExist):
+        msg = ''
+    else:
+        msg = credential.get_parameter_by_name(param_name)
+
+    output = json.dumps({'msg': msg or ''})
+    return HttpResponse(output, content_type="application/json")
+
 
 class CredentialBase(BaseDetailView):
     model = Credential
@@ -263,7 +281,10 @@ def database_configure_ssl(request, context, database):
     )
 
 
-def database_configure_ssl_retry(request, context, database):
+def database_configure_ssl_retry(request, context=None, database=None, id=None):
+
+    if database is None:
+        database = Database.objects.get(id=id)
 
     can_do_configure_ssl, error = database.can_do_configure_ssl_retry()
 
