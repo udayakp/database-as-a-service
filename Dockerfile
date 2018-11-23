@@ -1,4 +1,4 @@
-FROM python:2.7
+FROM centos/python-35-centos7:latest
 
 ADD . /code
 WORKDIR /code
