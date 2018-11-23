@@ -59,7 +59,6 @@ dbaas_networkapi==0.1.10
 dbaas_foreman==0.1.8
 dbaas_foxha==0.2.8
 GloboNetworkAPI==0.6.24
-Dex==0.6
 click==3.3
 requests==2.5.1
 python-dateutil==2.4.1
