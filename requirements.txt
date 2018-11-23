@@ -1,10 +1,9 @@
-pip==18.1
 Django==1.6.10
 Flask==0.10.1
 Jinja2==2.7.2
 Markdown==2.3.1
 MarkupSafe==0.18
-mysqlclient
+MySQL-python==1.2.5
 Pillow==2.3.0
 PyYAML==3.10
 South==1.0
@@ -40,7 +39,7 @@ pycrypto==2.6
 pymongo==3.4.0
 python-gnupg==0.3.6
 python-keyczar==0.71c
-python3-ldap
+python-ldap==2.3.13
 python-slugify==0.0.6
 pytz==2013.7
 raven==3.5.0
